@@ -4,9 +4,15 @@ const btnSearch = document.getElementById('btn-search');
 const gameSearchInput = document.getElementById('game-search');
 const resultContainer = document.getElementById('result-container');
 
+// Eventos de clique no botão e tecla Enter
 btnSearch.addEventListener('click', verificarJogo);
 gameSearchInput.addEventListener('keypress', (e) => {
   if (e.key === 'Enter') verificarJogo();
+});
+
+// Remove a borda vermelha assim que o usuário começar a digitar no campo
+gameSearchInput.addEventListener('input', () => {
+  gameSearchInput.classList.remove('input-error');
 });
 
 async function verificarJogo() {
@@ -14,14 +20,21 @@ async function verificarJogo() {
   const userRam = parseInt(document.getElementById('ram').value) || 0;
   const userVram = parseInt(document.getElementById('vram').value) || 0;
 
-  if (!nomeJogo) return alert("Digite o nome de um jogo!");
+  // Se o campo estiver vazio: adiciona a borda vermelha e encerra sem dar alertas
+  if (!nomeJogo) {
+    gameSearchInput.classList.add('input-error');
+    gameSearchInput.focus();
+    return;
+  }
+
+  // Garante que a borda vermelha seja removida na busca válida
+  gameSearchInput.classList.remove('input-error');
 
   try {
     const response = await fetch(`https://api.rawg.io/api/games?key=${API_KEY}&search=${encodeURIComponent(nomeJogo)}`);
     const data = await response.json();
 
     if (!data.results || data.results.length === 0) {
-      alert("Jogo não encontrado!");
       return;
     }
 
@@ -59,7 +72,6 @@ async function verificarJogo() {
     resultContainer.classList.remove('hidden');
 
   } catch (error) {
-    console.error("Erro:", error);
-    alert("Erro ao conectar com a API do RAWG.");
+    console.error("Erro na requisição:", error);
   }
 }
