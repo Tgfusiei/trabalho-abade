@@ -59,11 +59,18 @@ input {
   border-radius: 6px;
   font-size: 0.9rem;
   width: 100%;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 input:focus {
   outline: none;
   border-color: #8238ff;
+}
+
+/* Classe ativada quando a busca é enviada sem texto */
+input.input-error {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
 }
 
 .search-group {
