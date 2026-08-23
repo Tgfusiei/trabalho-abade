@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meu PC Roda?</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <main class="card">
+    <h1>🎮 Meu PC Roda?</h1>
+
+    <!-- Hardware do Usuário -->
+    <div class="inputs-grid">
+      <div class="input-group">
+        <label for="ram">RAM (GB)</label>
+        <input type="number" id="ram" value="8" min="1">
+      </div>
+      <div class="input-group">
+        <label for="vram">VRAM (GB)</label>
+        <input type="number" id="vram" value="2" min="1">
+      </div>
+    </div>
+
+    <!-- Busca de Jogo -->
+    <div class="search-group">
+      <input type="text" id="game-search" placeholder="Digite o nome do jogo..." autocomplete="off">
+      <button id="btn-search">Verificar</button>
+    </div>
+
+    <!-- Resultado -->
+    <div id="result-container" class="result-box hidden">
+      <h2 id="game-title">--</h2>
+      <img id="game-image" src="" alt="Capa do Jogo">
+      <div id="status-badge" class="badge">--</div>
+      <div class="requirements">
+        <strong>Requisitos Encontrados:</strong>
+        <p id="game-requirements">--</p>
+      </div>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
