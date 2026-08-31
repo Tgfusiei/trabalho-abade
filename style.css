@@ -42,7 +42,8 @@ h1 {
 .input-group {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
+  margin-bottom: 16px;
 }
 
 label {
@@ -59,7 +60,7 @@ input {
   border-radius: 6px;
   font-size: 0.9rem;
   width: 100%;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: border-color 0.2s;
 }
 
 input:focus {
@@ -67,16 +68,9 @@ input:focus {
   border-color: #8238ff;
 }
 
-/* Classe ativada quando a busca é enviada sem texto */
-input.input-error {
-  border-color: #ef4444 !important;
-  box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
-}
-
 .search-group {
   display: flex;
   gap: 8px;
-  margin-bottom: 20px;
 }
 
 button {
@@ -94,10 +88,18 @@ button:hover {
   background-color: #6a1bf3;
 }
 
+/* Texto de aviso discreto */
+.error-text {
+  color: #ef4444;
+  font-size: 0.8rem;
+  margin-top: 4px;
+}
+
 .result-box {
   border-top: 1px solid #2a2245;
   padding-top: 16px;
   text-align: center;
+  margin-top: 10px;
 }
 
 .result-box h2 {
