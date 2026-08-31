@@ -3,16 +3,17 @@ const API_KEY = '5fe08bb7bde44a3689876c213ca8dff3';
 const btnSearch = document.getElementById('btn-search');
 const gameSearchInput = document.getElementById('game-search');
 const resultContainer = document.getElementById('result-container');
+const errorMessage = document.getElementById('error-message');
 
-// Eventos de clique no botão e tecla Enter
+// Eventos de clique e tecla Enter
 btnSearch.addEventListener('click', verificarJogo);
 gameSearchInput.addEventListener('keypress', (e) => {
   if (e.key === 'Enter') verificarJogo();
 });
 
-// Remove a borda vermelha assim que o usuário começar a digitar no campo
+// Oculta a mensagem de erro assim que o usuário digita algo
 gameSearchInput.addEventListener('input', () => {
-  gameSearchInput.classList.remove('input-error');
+  errorMessage.classList.add('hidden');
 });
 
 async function verificarJogo() {
@@ -20,15 +21,14 @@ async function verificarJogo() {
   const userRam = parseInt(document.getElementById('ram').value) || 0;
   const userVram = parseInt(document.getElementById('vram').value) || 0;
 
-  // Se o campo estiver vazio: adiciona a borda vermelha e encerra sem dar alertas
+  // Se o campo estiver vazio: exibe o texto e interrompe
   if (!nomeJogo) {
-    gameSearchInput.classList.add('input-error');
-    gameSearchInput.focus();
+    errorMessage.classList.remove('hidden');
     return;
   }
 
-  // Garante que a borda vermelha seja removida na busca válida
-  gameSearchInput.classList.remove('input-error');
+  // Garante que o texto de erro esteja escondido em uma busca válida
+  errorMessage.classList.add('hidden');
 
   try {
     const response = await fetch(`https://api.rawg.io/api/games?key=${API_KEY}&search=${encodeURIComponent(nomeJogo)}`);
