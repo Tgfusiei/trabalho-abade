@@ -8,38 +8,40 @@
 </head>
 <body>
 
-  <main class="card">
-    <h1>🎮 Meu PC Roda?</h1>
+  <div class="card">
+    <h1>Meu PC Roda?</h1>
 
-    <!-- Hardware do Usuário -->
     <div class="inputs-grid">
       <div class="input-group">
         <label for="ram">RAM (GB)</label>
-        <input type="number" id="ram" value="8" min="1">
+        <input type="number" id="ram" placeholder="Ex: 8" min="1">
       </div>
       <div class="input-group">
         <label for="vram">VRAM (GB)</label>
-        <input type="number" id="vram" value="2" min="1">
+        <input type="number" id="vram" placeholder="Ex: 4" min="0">
       </div>
     </div>
 
-    <!-- Busca de Jogo -->
-    <div class="search-group">
-      <input type="text" id="game-search" placeholder="Digite o nome do jogo..." autocomplete="off">
-      <button id="btn-search">Verificar</button>
+    <div class="input-group">
+      <label for="game-search">Nome do Jogo</label>
+      <div class="search-group">
+        <input type="text" id="game-search" placeholder="Ex: GTA V, Cyberpunk...">
+        <button id="btn-search">Buscar</button>
+      </div>
+      <!-- Texto de erro discreto -->
+      <span id="error-message" class="error-text hidden">Por favor, digite um nome válido.</span>
     </div>
 
-    <!-- Resultado -->
     <div id="result-container" class="result-box hidden">
-      <h2 id="game-title">--</h2>
+      <h2 id="game-title"></h2>
+      <div id="status-badge" class="badge"></div>
       <img id="game-image" src="" alt="Capa do Jogo">
-      <div id="status-badge" class="badge">--</div>
       <div class="requirements">
-        <strong>Requisitos Encontrados:</strong>
-        <p id="game-requirements">--</p>
+        <strong>Requisitos Mínimos:</strong>
+        <p id="game-requirements"></p>
       </div>
     </div>
-  </main>
+  </div>
 
   <script src="script.js"></script>
 </body>
