@@ -61,11 +61,11 @@ async function verificarJogo() {
       else if (unidade === 'KB') requiredRamGb = valor / (1024 * 1024);
     }
 
-    // --- PARSER ISOLADO DE VRAM (Não confunde mais com a RAM do sistema) ---
-    const matchVram = reqText.match(/(?:graphics|video|vga|gpu|vram|card)[^.\d]*?(\d+(?:\.\d+)?)\s*(GB|MB|KB)/i) ||
-                      reqText.match(/(\d+(?:\.\d+)?)\s*(GB|MB|KB)\s*(?:vga|gpu|vram|video|graphics)/i);
+    // --- PARSER ISOLADO DE VRAM (Restrito à linha para não misturar com RAM) ---
+    const matchVram = reqText.match(/(?:graphics|video|vga|gpu|vram|card)[^\n\r\d]*?(\d+(?:\.\d+)?)\s*(GB|MB|KB)/i) ||
+                      reqText.match(/(\d+(?:\.\d+)?)\s*(GB|MB|KB)[^\n\r]*?(?:vga|gpu|vram|video|graphics)/i);
     
-    let requiredVramGb = 0; // Padrão 0 para jogos leves
+    let requiredVramGb = 0; // Padrão 0 para jogos que não exigem placa dedicada pesada
     
     if (matchVram) {
       const valor = parseFloat(matchVram[1]);
@@ -78,8 +78,8 @@ async function verificarJogo() {
         requiredVramGb = valor / (1024 * 1024);
       }
     } else {
-      // Caso alternativo para textos como "256 mb" perto de vídeo
-      const matchMbGeneric = reqText.match(/(?:graphics|video|vga|gpu|card)[^.\d]*?(\d+)\s*mb/i);
+      // Caso alternativo para termos genéricos em MB na mesma linha de vídeo
+      const matchMbGeneric = reqText.match(/(?:graphics|video|vga|gpu|card)[^\n\r]*?(\d+)\s*mb/i);
       if (matchMbGeneric) {
         requiredVramGb = parseInt(matchMbGeneric[1]) / 1024;
       } else {
