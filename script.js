@@ -18,8 +18,9 @@ gameSearchInput.addEventListener('input', () => {
 
 async function verificarJogo() {
   const nomeJogo = gameSearchInput.value.trim();
-  const userRam = parseInt(document.getElementById('ram').value) || 0;
-  const userVram = parseInt(document.getElementById('vram').value) || 0;
+  const userRam = parseFloat(document.getElementById('ram').value) || 0;
+  const userVram = parseFloat(document.getElementById('vram').value) || 0;
+  const userCpuText = document.getElementById('cpu').value.toLowerCase().trim();
 
   // Se o campo estiver vazio: exibe o texto e interrompe
   if (!nomeJogo) {
@@ -46,15 +47,69 @@ async function verificarJogo() {
     const pcPlatform = jogoDetalhes.platforms?.find(p => p.platform.id === 4);
     const reqText = pcPlatform?.requirements?.minimum || "Requisitos não informados.";
 
-    const matchRam = reqText.match(/(\d+)\s*GB\s*RAM/i) || reqText.match(/(\d+)\s*GB/i);
-    const matchVram = reqText.match(/(\d+)\s*GB\s*VRAM/i) || reqText.match(/(\d+)\s*GB\s*(vga|gpu|video|graphics)/i);
+    // --- PARSER UNIVERSAL DE RAM (Convertido sempre para Gigabytes - GB) ---
+    const matchRam = reqText.match(/(\d+(?:\.\d+)?)\s*(GB|MB|KB)/i);
+    let requiredRamGb = 4; // Padrão de segurança
+    
+    if (matchRam) {
+      const valor = parseFloat(matchRam[1]);
+      const unidade = matchRam[2].toUpperCase();
+      if (unidade === 'GB') {
+        requiredRamGb = valor;
+      } else if (unidade === 'MB') {
+        requiredRamGb = valor / 1024; // Ex: 2048 MB vira 2 GB
+      } else if (unidade === 'KB') {
+        requiredRamGb = valor / (1024 * 1024);
+      }
+    }
 
-    const requiredRam = matchRam ? parseInt(matchRam[1]) : 4;
-    const requiredVram = matchVram ? parseInt(matchVram[1]) : 2;
+    // --- PARSER UNIVERSAL DE VRAM / VÍDEO (Convertido sempre para Gigabytes - GB) ---
+    // Procura por menções de vídeo seguidas de número e unidade, ou número e unidade seguidos de vram/graphics
+    const matchVram = reqText.match(/(?:vga|gpu|video|graphics|memory|card)[^.\d]*?(\d+(?:\.\d+)?)\s*(GB|MB|KB)/i) || 
+                      reqText.match(/(\d+(?:\.\d+)?)\s*(GB|MB|KB)\s*(?:vram|vga|gpu|video|graphics)/i);
+    
+    let requiredVramGb = 0; // Padrão 0 se não citar placa pesada
+    
+    if (matchVram) {
+      const valor = parseFloat(matchVram[1]);
+      const unidade = matchVram[2].toUpperCase();
+      if (unidade === 'GB') {
+        requiredVramGb = valor;
+      } else if (unidade === 'MB') {
+        requiredVramGb = valor / 1024; // Ex: 512 MB vira 0.5 GB, 2048 MB vira 2 GB
+      } else if (unidade === 'KB') {
+        requiredVramGb = valor / (1024 * 1024);
+      }
+    } else {
+      // Se o texto não especifica claramente VRAM mas menciona termos genéricos pesados, aplica um padrão seguro
+      const reqLower = reqText.toLowerCase();
+      if (reqLower.includes('vram') || reqLower.includes('graphics card')) {
+        requiredVramGb = 1.0; // Padrão prudente de 1GB se citar placa sem número
+      }
+    }
 
-    const temRam = userRam >= requiredRam;
-    const temVram = userVram >= requiredVram;
-    const roda = temRam && temVram;
+    // --- LÓGICA DO PROCESSADOR (CPU) ---
+    const matchCpu = reqText.match(/(i[3579]|ryzen\s*[3579])/i);
+    const requiredCpuTier = matchCpu ? matchCpu[1].toLowerCase().replace(/\s+/g, '') : null;
+
+    const cpuTiers = { 'i3': 1, 'ryzen3': 1, 'i5': 2, 'ryzen5': 2, 'i7': 3, 'ryzen7': 3, 'i9': 4, 'ryzen9': 4 };
+
+    let userCpuLevel = 2; // Padrão médio
+    for (const [key, val] of Object.entries(cpuTiers)) {
+      if (userCpuText.includes(key)) {
+        userCpuLevel = val;
+        break;
+      }
+    }
+
+    const requiredCpuLevel = requiredCpuTier && cpuTiers[requiredCpuTier] ? cpuTiers[requiredCpuTier] : 1;
+
+    // Validações finais com base numérica unificada em GB
+    const temRam = userRam >= requiredRamGb;
+    const temVram = userVram >= requiredVramGb;
+    const temCpu = userCpuLevel >= requiredCpuLevel;
+
+    const roda = temRam && temVram && temCpu;
 
     document.getElementById('game-title').innerText = jogo.name;
     document.getElementById('game-image').src = jogo.background_image || '';
@@ -65,7 +120,12 @@ async function verificarJogo() {
       badge.innerText = "🟢 RODA NO SEU PC";
       badge.className = "badge success";
     } else {
-      badge.innerText = `🔴 NÃO RODA (Exige ${requiredRam}GB RAM / ${requiredVram}GB VRAM)`;
+      let motivo = [];
+      if (!temRam) motivo.push(`${Math.ceil(requiredRamGb)}GB RAM`);
+      if (!temVram) motivo.push(`${requiredVramGb < 1 ? Math.round(requiredVramGb * 1024) + 'MB' : requiredVramGb + 'GB'} VRAM`);
+      if (!temCpu && requiredCpuTier) motivo.push(`CPU ${requiredCpuTier.toUpperCase()}`);
+
+      badge.innerText = `🔴 NÃO RODA (Exige: ${motivo.join(' / ')})`;
       badge.className = "badge danger";
     }
 
