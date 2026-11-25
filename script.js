@@ -4,6 +4,27 @@ const btnSearch = document.getElementById('btn-search');
 const gameSearchInput = document.getElementById('game-search');
 const resultContainer = document.getElementById('result-container');
 const errorMessage = document.getElementById('error-message');
+const vramInput = document.getElementById('vram');
+const vramInfo = document.getElementById('vram-info');
+
+// Atualiza a dica em tempo real mostrando a conversão MB <-> GB
+vramInput.addEventListener('input', () => {
+  const val = parseFloat(vramInput.value);
+  if (isNaN(val) || val <= 0) {
+    vramInfo.innerHTML = "Digite em MB (ex: 256) ou GB (ex: 2)";
+    return;
+  }
+
+  if (val > 16) {
+    // Se digitou em MB (ex: 4096)
+    const emGb = (val / 1024).toFixed(2);
+    vramInfo.innerHTML = `💡 ${val} MB = <strong>${emGb} GB</strong> VRAM`;
+  } else {
+    // Se digitou em GB (ex: 4)
+    const emMb = Math.round(val * 1024);
+    vramInfo.innerHTML = `💡 ${val} GB = <strong>${emMb} MB</strong> VRAM`;
+  }
+});
 
 btnSearch.addEventListener('click', verificarJogo);
 gameSearchInput.addEventListener('keypress', (e) => {
@@ -14,7 +35,6 @@ gameSearchInput.addEventListener('input', () => {
   errorMessage.classList.add('hidden');
 });
 
-// Calcula pontuação baseada em Família + Geração que o usuário completou (Ex: Intel Core i3-2100)
 function calcularScoreCpu(textoCpu) {
   const texto = textoCpu.toLowerCase().trim();
   if (!texto) return 150;
@@ -47,7 +67,6 @@ function calcularScoreCpu(textoCpu) {
     return score;
   }
 
-  // Processadores legados
   if (texto.includes('fx-8') || texto.includes('fx 8')) return 140;
   if (texto.includes('fx-6') || texto.includes('fx 6')) return 120;
   if (texto.includes('core 2 quad') || texto.includes('phenom')) return 70;
@@ -59,7 +78,11 @@ function calcularScoreCpu(textoCpu) {
 async function verificarJogo() {
   const nomeJogo = gameSearchInput.value.trim();
   const userRam = parseFloat(document.getElementById('ram').value) || 0;
-  const userVram = parseFloat(document.getElementById('vram').value) || 0;
+  const inputVramRaw = parseFloat(vramInput.value) || 0;
+
+  // Lógica inteligente: se o usuário digitar mais que 16, assumimos que colocou em MB (ex: 256 ou 2048) e convertemos para GB. Senão, tratamos como GB.
+  const userVram = inputVramRaw > 16 ? inputVramRaw / 1024 : inputVramRaw;
+
   const userCpuText = document.getElementById('cpu').value;
 
   if (!nomeJogo) {
@@ -108,12 +131,16 @@ async function verificarJogo() {
     if (matchVram) {
       const valor = parseFloat(matchVram[1]);
       const unidade = matchVram[2].toUpperCase();
-      if (unidade === 'GB') requiredVramGb = valor;
-      else if (unidade === 'MB') requiredVramGb = valor / 1024;
-      else if (unidade === 'KB') requiredVramGb = valor / (1024 * 1024);
+      if (unidade === 'GB') {
+        requiredVramGb = valor;
+      } else if (unidade === 'MB') {
+        requiredVramGb = valor / 1024;
+      } else if (unidade === 'KB') {
+        requiredVramGb = valor / (1024 * 1024);
+      }
     }
 
-    // --- EXTRAÇÃO DO PROCESSADOR EXIGIDO PELO JOGO ---
+    // --- EXTRAÇÃO DA CPU EXIGIDA PELO JOGO ---
     const matchCpuReq = reqText.match(/(?:processor|cpu)[^\n\r]*?((?:i[3579]|ryzen\s*[3579])[\s-]*\d{4,5}|i[3579]|ryzen\s*[3579]|fx[\s-]*\d{4}|core\s*2\s*(?:duo|quad)|phenom)/i) ||
                         reqText.match(/((?:i[3579]|ryzen\s*[3579])[\s-]*\d{4,5}|i[3579]|ryzen\s*[3579]|fx[\s-]*\d{4}|core\s*2\s*(?:duo|quad)|phenom)/i);
     
@@ -138,7 +165,10 @@ async function verificarJogo() {
     } else {
       let motivo = [];
       if (!temRam) motivo.push(`${Math.ceil(requiredRamGb)}GB RAM`);
-      if (!temVram) motivo.push(`${requiredVramGb < 1 ? Math.round(requiredVramGb * 1024) + 'MB' : requiredVramGb + 'GB'} VRAM`);
+      if (!temVram) {
+        const vramExigidaTexto = requiredVramGb < 1 ? Math.round(requiredVramGb * 1024) + 'MB' : requiredVramGb + 'GB';
+        motivo.push(`${vramExigidaTexto} VRAM`);
+      }
       if (!temCpu && requiredCpuText) motivo.push(`CPU ${requiredCpuText.toUpperCase()}`);
 
       badge.innerText = `🔴 NÃO RODA (Exige: ${motivo.join(' / ')})`;
