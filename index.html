@@ -1,90 +1,65 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Meu PC Roda?</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-  <div class="card">
-    <h1>Meu PC Roda?</h1>
-
-    <div class="inputs-grid">
-      <div class="input-group">
-        <label for="ram">RAM (GB)</label>
-        <input type="number" id="ram" placeholder="Ex: 8" min="1">
-      </div>
-      <div class="input-group">
-        <label for="vram">VRAM (GB)</label>
-        <input type="number" id="vram" placeholder="Ex: 4" min="0" step="0.5">
-      </div>
-    </div>
-
-    <!-- Campo de Processador com Modelos Específicos -->
+<!-- Campo de Processador com Sugestões e Dica Visual -->
     <div class="input-group">
-      <label for="cpu">Processador (Modelo Específico)</label>
-      <input type="text" id="cpu" placeholder="Ex: i3-2100, i7-3770, Ryzen 5 3600..." list="cpu-suggestions">
+      <label for="cpu">Processador (Modelo e Geração)</label>
+      <input 
+        type="text" 
+        id="cpu" 
+        placeholder="Digite o modelo (ex: i3-2100, i7-3770, Ryzen 5 3600)" 
+        list="cpu-suggestions"
+        autocomplete="off"
+      >
+      <span class="hint-text">Dica: Digite a linha e o número (ex: <strong>i5-10400</strong> ou <strong>Ryzen 5 5600</strong>)</span>
+
       <datalist id="cpu-suggestions">
-        <option value="Intel Core 2 Duo E6600">
+        <!-- Intel Core i3 -->
         <option value="Intel Core i3-2100">
+        <option value="Intel Core i3-3220">
         <option value="Intel Core i3-4170">
+        <option value="Intel Core i3-7100">
         <option value="Intel Core i3-8100">
         <option value="Intel Core i3-10100F">
         <option value="Intel Core i3-12100F">
+        <!-- Intel Core i5 -->
         <option value="Intel Core i5-2400">
         <option value="Intel Core i5-3470">
         <option value="Intel Core i5-4460">
+        <option value="Intel Core i5-6400">
         <option value="Intel Core i5-7400">
+        <option value="Intel Core i5-8400">
         <option value="Intel Core i5-9400F">
         <option value="Intel Core i5-10400F">
+        <option value="Intel Core i5-11400F">
         <option value="Intel Core i5-12400F">
+        <!-- Intel Core i7 / i9 -->
         <option value="Intel Core i7-2600">
         <option value="Intel Core i7-3770">
         <option value="Intel Core i7-4790">
         <option value="Intel Core i7-6700K">
+        <option value="Intel Core i7-7700K">
         <option value="Intel Core i7-8700K">
         <option value="Intel Core i7-10700K">
         <option value="Intel Core i7-12700K">
         <option value="Intel Core i9-9900K">
         <option value="Intel Core i9-12900K">
-        <option value="AMD Phenom X3 8750">
-        <option value="AMD FX-6300">
-        <option value="AMD FX-8350">
+        <!-- AMD Ryzen -->
         <option value="AMD Ryzen 3 1200">
+        <option value="AMD Ryzen 3 2200G">
         <option value="AMD Ryzen 3 3200G">
         <option value="AMD Ryzen 5 1600">
         <option value="AMD Ryzen 5 2600">
         <option value="AMD Ryzen 5 3600">
+        <option value="AMD Ryzen 5 4600G">
+        <option value="AMD Ryzen 5 5500">
         <option value="AMD Ryzen 5 5600">
         <option value="AMD Ryzen 7 2700X">
         <option value="AMD Ryzen 7 3700X">
+        <option value="AMD Ryzen 7 5700X">
         <option value="AMD Ryzen 7 5800X">
         <option value="AMD Ryzen 9 5900X">
+        <!-- Antigos / Entrada -->
+        <option value="Intel Core 2 Duo E6600">
+        <option value="AMD Phenom X3 8750">
+        <option value="AMD FX-6300">
+        <option value="AMD FX-8350">
       </datalist>
     </div>
-
-    <div class="input-group">
-      <label for="game-search">Nome do Jogo</label>
-      <div class="search-group">
-        <input type="text" id="game-search" placeholder="Ex: GTA V, Cyberpunk, CS:GO...">
-        <button id="btn-search">Buscar</button>
-      </div>
-      <span id="error-message" class="error-text hidden">Por favor, digite um nome válido.</span>
-    </div>
-
-    <div id="result-container" class="result-box hidden">
-      <h2 id="game-title"></h2>
-      <div id="status-badge" class="badge"></div>
-      <img id="game-image" src="" alt="Capa do Jogo">
-      <div class="requirements">
-        <strong>Requisitos Mínimos:</strong>
-        <p id="game-requirements"></p>
-      </div>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
-</body>
-</html>
