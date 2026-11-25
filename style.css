@@ -9,6 +9,7 @@ body {
   background-color: #0b0914;
   color: #f1f0f7;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
@@ -68,32 +69,14 @@ input:focus {
   border-color: #8238ff;
 }
 
-/* Container que segura o input e o rodapé juntinhos */
-.input-with-footer {
-  display: flex;
-  flex-direction: column;
-}
-
-/* O rodapé logo abaixo da caixa de input */
-.input-footer {
-  font-size: 0.65rem;
+/* Estilo para o aviso posicionado do lado de fora da caixa inteira */
+.outside-footer-hint {
+  font-size: 0.75rem;
   color: #9d5cff;
-  background-color: #0b0914;
-  border: 1px solid #2a2245;
-  border-top: none;
-  padding: 4px 8px;
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;
+  margin-top: 12px;
   text-align: center;
   font-weight: 500;
-  letter-spacing: 0.2px;
-}
-
-/* Ajusta as bordas do input para encaixar perfeitamente com o rodapé */
-.input-with-footer input {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-  border-bottom: 1px solid #2a2245;
+  letter-spacing: 0.3px;
 }
 
 .hint-text {
