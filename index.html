@@ -22,13 +22,28 @@
       </div>
     </div>
 
+    <!-- Campo de Processador com Sugestões (Autocompletar) -->
+    <div class="input-group">
+      <label for="cpu">Processador (Nível / Geração)</label>
+      <input type="text" id="cpu" placeholder="Ex: i5, Ryzen 5..." list="cpu-suggestions">
+      <datalist id="cpu-suggestions">
+        <option value="Intel Core i3">
+        <option value="Intel Core i5">
+        <option value="Intel Core i7">
+        <option value="Intel Core i9">
+        <option value="AMD Ryzen 3">
+        <option value="AMD Ryzen 5">
+        <option value="AMD Ryzen 7">
+        <option value="AMD Ryzen 9">
+      </datalist>
+    </div>
+
     <div class="input-group">
       <label for="game-search">Nome do Jogo</label>
       <div class="search-group">
         <input type="text" id="game-search" placeholder="Ex: GTA V, Cyberpunk...">
         <button id="btn-search">Buscar</button>
       </div>
-      <!-- Texto de erro discreto -->
       <span id="error-message" class="error-text hidden">Por favor, digite um nome válido.</span>
     </div>
 
