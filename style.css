@@ -68,6 +68,34 @@ input:focus {
   border-color: #8238ff;
 }
 
+/* Container que segura o input e o rodapé juntinhos */
+.input-with-footer {
+  display: flex;
+  flex-direction: column;
+}
+
+/* O rodapé logo abaixo da caixa de input */
+.input-footer {
+  font-size: 0.65rem;
+  color: #9d5cff;
+  background-color: #0b0914;
+  border: 1px solid #2a2245;
+  border-top: none;
+  padding: 4px 8px;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  text-align: center;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+
+/* Ajusta as bordas do input para encaixar perfeitamente com o rodapé */
+.input-with-footer input {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom: 1px solid #2a2245;
+}
+
 .hint-text {
   font-size: 0.75rem;
   color: #8b85a1;
@@ -76,13 +104,6 @@ input:focus {
 
 .hint-text strong {
   color: #b78aff;
-}
-
-.external-hint {
-  font-size: 0.7rem;
-  color: #9d5cff;
-  margin-top: 3px;
-  font-weight: 500;
 }
 
 .search-group {
