@@ -47,28 +47,23 @@ async function verificarJogo() {
     const pcPlatform = jogoDetalhes.platforms?.find(p => p.platform.id === 4);
     const reqText = pcPlatform?.requirements?.minimum || "Requisitos não informados.";
 
-    // --- PARSER UNIVERSAL DE RAM (Convertido sempre para Gigabytes - GB) ---
+    // --- PARSER UNIVERSAL DE RAM (Convertido para GB) ---
     const matchRam = reqText.match(/(\d+(?:\.\d+)?)\s*(GB|MB|KB)/i);
-    let requiredRamGb = 4; // Padrão de segurança
+    let requiredRamGb = 4;
     
     if (matchRam) {
       const valor = parseFloat(matchRam[1]);
       const unidade = matchRam[2].toUpperCase();
-      if (unidade === 'GB') {
-        requiredRamGb = valor;
-      } else if (unidade === 'MB') {
-        requiredRamGb = valor / 1024; // Ex: 2048 MB vira 2 GB
-      } else if (unidade === 'KB') {
-        requiredRamGb = valor / (1024 * 1024);
-      }
+      if (unidade === 'GB') requiredRamGb = valor;
+      else if (unidade === 'MB') requiredRamGb = valor / 1024;
+      else if (unidade === 'KB') requiredRamGb = valor / (1024 * 1024);
     }
 
-    // --- PARSER UNIVERSAL DE VRAM / VÍDEO (Convertido sempre para Gigabytes - GB) ---
-    // Procura por menções de vídeo seguidas de número e unidade, ou número e unidade seguidos de vram/graphics
+    // --- PARSER UNIVERSAL DE VRAM (Convertido para GB) ---
     const matchVram = reqText.match(/(?:vga|gpu|video|graphics|memory|card)[^.\d]*?(\d+(?:\.\d+)?)\s*(GB|MB|KB)/i) || 
                       reqText.match(/(\d+(?:\.\d+)?)\s*(GB|MB|KB)\s*(?:vram|vga|gpu|video|graphics)/i);
     
-    let requiredVramGb = 0; // Padrão 0 se não citar placa pesada
+    let requiredVramGb = 0; // Padrão 0 para jogos que não exigem placa dedicada pesada
     
     if (matchVram) {
       const valor = parseFloat(matchVram[1]);
@@ -76,16 +71,12 @@ async function verificarJogo() {
       if (unidade === 'GB') {
         requiredVramGb = valor;
       } else if (unidade === 'MB') {
-        requiredVramGb = valor / 1024; // Ex: 512 MB vira 0.5 GB, 2048 MB vira 2 GB
+        requiredVramGb = valor / 1024; // Converte MB para GB (ex: 256MB vira 0.25GB)
       } else if (unidade === 'KB') {
         requiredVramGb = valor / (1024 * 1024);
       }
     } else {
-      // Se o texto não especifica claramente VRAM mas menciona termos genéricos pesados, aplica um padrão seguro
-      const reqLower = reqText.toLowerCase();
-      if (reqLower.includes('vram') || reqLower.includes('graphics card')) {
-        requiredVramGb = 1.0; // Padrão prudente de 1GB se citar placa sem número
-      }
+      requiredVramGb = 0; // Se a API não citou VRAM no texto, o requisito é zero
     }
 
     // --- LÓGICA DO PROCESSADOR (CPU) ---
@@ -94,7 +85,7 @@ async function verificarJogo() {
 
     const cpuTiers = { 'i3': 1, 'ryzen3': 1, 'i5': 2, 'ryzen5': 2, 'i7': 3, 'ryzen7': 3, 'i9': 4, 'ryzen9': 4 };
 
-    let userCpuLevel = 2; // Padrão médio
+    let userCpuLevel = 2;
     for (const [key, val] of Object.entries(cpuTiers)) {
       if (userCpuText.includes(key)) {
         userCpuLevel = val;
@@ -104,7 +95,7 @@ async function verificarJogo() {
 
     const requiredCpuLevel = requiredCpuTier && cpuTiers[requiredCpuTier] ? cpuTiers[requiredCpuTier] : 1;
 
-    // Validações finais com base numérica unificada em GB
+    // Validações finais
     const temRam = userRam >= requiredRamGb;
     const temVram = userVram >= requiredVramGb;
     const temCpu = userCpuLevel >= requiredCpuLevel;
