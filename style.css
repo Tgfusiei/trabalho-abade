@@ -78,6 +78,13 @@ input:focus {
   color: #b78aff;
 }
 
+.external-hint {
+  font-size: 0.7rem;
+  color: #9d5cff;
+  margin-top: 3px;
+  font-weight: 500;
+}
+
 .search-group {
   display: flex;
   gap: 8px;
