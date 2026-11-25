@@ -59,15 +59,13 @@ async function verificarJogo() {
   const nomeJogo = gameSearchInput.value.trim();
   const userRam = parseFloat(document.getElementById('ram').value) || 0;
   
-  // Converte MB digitado para GB para comparar com os dados da API
   const userVramMb = parseFloat(vramInput.value) || 0;
   const userVram = userVramMb / 1024;
 
   const userCpuText = document.getElementById('cpu').value;
 
   if (!nomeJogo) {
-    errorMessage.classList.add('hidden');
-    errorMessage.classList.remove('hidden'); // garante exibição correta
+    errorMessage.classList.remove('hidden');
     return;
   }
 
@@ -89,7 +87,6 @@ async function verificarJogo() {
     const pcPlatform = jogoDetalhes.platforms?.find(p => p.platform.id === 4);
     const reqText = pcPlatform?.requirements?.minimum || "Requisitos não informados.";
 
-    // --- PARSER ISOLADO DE RAM ---
     const matchRam = reqText.match(/(?:RAM|memory|system)[^\n\r\d]*?(\d+(?:\.\d+)?)\s*(GB|MB|KB)/i) || 
                       reqText.match(/(\d+(?:\.\d+)?)\s*(GB|MB|KB)\s*(?:RAM|memory)/i) ||
                       reqText.match(/(\d+(?:\.\d+)?)\s*GB/i);
@@ -103,7 +100,6 @@ async function verificarJogo() {
       else if (unidade === 'KB') requiredRamGb = valor / (1024 * 1024);
     }
 
-    // --- PARSER ISOLADO DE VRAM ---
     const matchVram = reqText.match(/(?:graphics|video|vga|gpu|vram|card)[^\n\r\d]*?(\d+(?:\.\d+)?)\s*(GB|MB|KB)/i) ||
                       reqText.match(/(\d+(?:\.\d+)?)\s*(GB|MB|KB)[^\n\r]*?(?:vga|gpu|vram|video|graphics)/i);
     
@@ -121,7 +117,6 @@ async function verificarJogo() {
       }
     }
 
-    // --- EXTRAÇÃO DA CPU EXIGIDA PELO JOGO ---
     const matchCpuReq = reqText.match(/(?:processor|cpu)[^\n\r]*?((?:i[3579]|ryzen\s*[3579])[\s-]*\d{4,5}|i[3579]|ryzen\s*[3579]|fx[\s-]*\d{4}|core\s*2\s*(?:duo|quad)|phenom)/i) ||
                         reqText.match(/((?:i[3579]|ryzen\s*[3579])[\s-]*\d{4,5}|i[3579]|ryzen\s*[3579]|fx[\s-]*\d{4}|core\s*2\s*(?:duo|quad)|phenom)/i);
     
