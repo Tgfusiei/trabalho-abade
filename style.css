@@ -46,10 +46,6 @@ h1 {
   margin-bottom: 16px;
 }
 
-.autocomplete-wrapper {
-  position: relative;
-}
-
 label {
   font-size: 0.8rem;
   color: #a29db8;
@@ -80,39 +76,6 @@ input:focus {
 
 .hint-text strong {
   color: #b78aff;
-}
-
-.dropdown-list {
-  position: absolute;
-  top: 66px;
-  left: 0;
-  right: 0;
-  background-color: #1c1730;
-  border: 2px solid #8238ff;
-  border-radius: 6px;
-  max-height: 180px;
-  overflow-y: auto;
-  list-style: none;
-  z-index: 9999;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.9);
-}
-
-.dropdown-list li {
-  padding: 12px;
-  font-size: 0.85rem;
-  color: #f1f0f7;
-  cursor: pointer;
-  border-bottom: 1px solid #2a2245;
-}
-
-.dropdown-list li:last-child {
-  border-bottom: none;
-}
-
-.dropdown-list li:active,
-.dropdown-list li:hover {
-  background-color: #8238ff;
-  color: #fff;
 }
 
 .search-group {
