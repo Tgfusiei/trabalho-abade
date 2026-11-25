@@ -69,7 +69,7 @@ input:focus {
   border-color: #8238ff;
 }
 
-/* Estilo para o aviso posicionado do lado de fora da caixa inteira */
+/* Estilo para o aviso posicionado exatamente no local indicado pelo risco azul */
 .outside-footer-hint {
   font-size: 0.75rem;
   color: #9d5cff;
@@ -77,6 +77,8 @@ input:focus {
   text-align: center;
   font-weight: 500;
   letter-spacing: 0.3px;
+  width: 100%;
+  max-width: 420px;
 }
 
 .hint-text {
