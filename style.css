@@ -82,34 +82,36 @@ input:focus {
   color: #b78aff;
 }
 
+/* Dropdown flutuante ajustado para telemóveis e PC */
 .dropdown-list {
   position: absolute;
-  top: 64px;
+  top: 100%;
   left: 0;
   right: 0;
   background-color: #1c1730;
   border: 1px solid #8238ff;
   border-radius: 6px;
-  max-height: 180px;
+  max-height: 160px;
   overflow-y: auto;
   list-style: none;
-  z-index: 100;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+  z-index: 9999;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8);
+  margin-top: 4px;
 }
 
 .dropdown-list li {
-  padding: 10px 12px;
+  padding: 12px;
   font-size: 0.85rem;
   color: #f1f0f7;
   cursor: pointer;
   border-bottom: 1px solid #2a2245;
-  transition: background 0.15s;
 }
 
 .dropdown-list li:last-child {
   border-bottom: none;
 }
 
+.dropdown-list li:active, 
 .dropdown-list li:hover {
   background-color: #8238ff;
   color: #fff;
