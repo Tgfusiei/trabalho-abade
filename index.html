@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Meu PC Roda?</title>
-  <link rel="stylesheet" href="style.css?v=8">
+  <link rel="stylesheet" href="style.css?v=9">
 </head>
 <body>
 
@@ -17,6 +17,7 @@
         <input type="number" id="ram" placeholder="Ex: 8" min="1">
       </div>
       
+      <!-- Caixa de VRAM limpa, sem o rodapé interno -->
       <div class="input-group">
         <label for="vram">VRAM (MB)</label>
         <input type="number" id="vram" placeholder="Ex: 512, 1024, 2048..." min="0" step="any">
@@ -70,11 +71,11 @@
     </div>
   </div>
 
-  <!-- Aviso de VRAM posicionado do lado de fora, logo abaixo da caixa inteira -->
+  <!-- Aviso posicionado exatamente na área onde rabiscou de azul, logo abaixo da caixa principal -->
   <div class="outside-footer-hint">
-    💡 1 GB = 1024 MB | 2 GB = 2048 MB
+    1 GB = 1024 MB | 2 GB = 2048 MB
   </div>
 
-  <script src="script.js?v=8"></script>
+  <script src="script.js?v=9"></script>
 </body>
 </html>
