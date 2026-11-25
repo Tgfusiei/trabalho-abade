@@ -59,14 +59,15 @@ async function verificarJogo() {
   const nomeJogo = gameSearchInput.value.trim();
   const userRam = parseFloat(document.getElementById('ram').value) || 0;
   
-  // Como o usuário digita em MB, convertemos para GB dividindo por 1024 para comparar com a API
+  // Converte MB digitado para GB para comparar com os dados da API
   const userVramMb = parseFloat(vramInput.value) || 0;
   const userVram = userVramMb / 1024;
 
   const userCpuText = document.getElementById('cpu').value;
 
   if (!nomeJogo) {
-    errorMessage.classList.remove('hidden');
+    errorMessage.classList.add('hidden');
+    errorMessage.classList.remove('hidden'); // garante exibição correta
     return;
   }
 
@@ -146,7 +147,6 @@ async function verificarJogo() {
       let motivo = [];
       if (!temRam) motivo.push(`${Math.ceil(requiredRamGb)}GB RAM`);
       if (!temVram) {
-        // Exibe em MB se for menor que 1GB, ou em GB se for maior
         const vramExigidaTexto = requiredVramGb < 1 ? Math.round(requiredVramGb * 1024) + 'MB' : requiredVramGb + 'GB';
         motivo.push(`${vramExigidaTexto} VRAM`);
       }
