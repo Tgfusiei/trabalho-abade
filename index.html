@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Meu PC Roda?</title>
-  <link rel="stylesheet" href="style.css?v=4">
+  <link rel="stylesheet" href="style.css?v=5">
 </head>
 <body>
 
@@ -16,13 +16,15 @@
         <label for="ram">RAM (GB)</label>
         <input type="number" id="ram" placeholder="Ex: 8" min="1">
       </div>
+      <!-- Campo de VRAM aceitando MB ou GB -->
       <div class="input-group">
-        <label for="vram">VRAM (GB)</label>
-        <input type="number" id="vram" placeholder="Ex: 4" min="0" step="0.5">
+        <label for="vram">VRAM (MB ou GB)</label>
+        <input type="number" id="vram" placeholder="Ex: 256 ou 4" min="0" step="any">
+        <span id="vram-info" class="hint-text">Digite em MB (ex: 256) ou GB (ex: 2)</span>
       </div>
     </div>
 
-    <!-- Campo de Processador: sugere o prefixo para o usuário completar o número -->
+    <!-- Campo de Processador -->
     <div class="input-group">
       <label for="cpu">Processador (Linha + Modelo)</label>
       <input 
@@ -69,6 +71,6 @@
     </div>
   </div>
 
-  <script src="script.js?v=4"></script>
+  <script src="script.js?v=5"></script>
 </body>
 </html>
