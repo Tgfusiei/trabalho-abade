@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Meu PC Roda?</title>
-  <link rel="stylesheet" href="style.css?v=2">
+  <link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
 
@@ -22,19 +22,31 @@
       </div>
     </div>
 
-    <!-- Campo de Processador com Lista Customizada -->
-    <div class="input-group autocomplete-wrapper">
-      <label for="cpu">Processador (Nome Completo / Modelo)</label>
+    <!-- Campo de Processador: sugere o prefixo para o usuário completar o número -->
+    <div class="input-group">
+      <label for="cpu">Processador (Linha + Modelo)</label>
       <input 
         type="text" 
         id="cpu" 
-        placeholder="Toque ou digite i3, i5, i7, Ryzen..." 
+        placeholder="Ex: Intel Core i3-2100, AMD Ryzen 5 3600..." 
+        list="cpu-prefixes"
         autocomplete="off"
       >
-      <span class="hint-text">Ex: <strong>Intel Core i3-2100</strong>, <strong>Intel Core i7-3770</strong>, <strong>AMD Ryzen 5 3600</strong></span>
-      
-      <!-- Lista flutuante de sugestões -->
-      <ul id="cpu-dropdown" class="dropdown-list hidden"></ul>
+      <span class="hint-text">Escolha o começo (ex: <strong>Intel Core i3-</strong>) e digite o número do modelo.</span>
+
+      <datalist id="cpu-prefixes">
+        <option value="Intel Core i3-">
+        <option value="Intel Core i5-">
+        <option value="Intel Core i7-">
+        <option value="Intel Core i9-">
+        <option value="Intel Core 2 Duo ">
+        <option value="AMD Ryzen 3 ">
+        <option value="AMD Ryzen 5 ">
+        <option value="AMD Ryzen 7 ">
+        <option value="AMD Ryzen 9 ">
+        <option value="AMD FX-">
+        <option value="AMD Phenom ">
+      </datalist>
     </div>
 
     <div class="input-group">
@@ -57,6 +69,6 @@
     </div>
   </div>
 
-  <script src="script.js?v=2"></script>
+  <script src="script.js?v=4"></script>
 </body>
 </html>
