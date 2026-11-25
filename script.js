@@ -4,57 +4,6 @@ const btnSearch = document.getElementById('btn-search');
 const gameSearchInput = document.getElementById('game-search');
 const resultContainer = document.getElementById('result-container');
 const errorMessage = document.getElementById('error-message');
-const cpuInput = document.getElementById('cpu');
-const cpuDropdown = document.getElementById('cpu-dropdown');
-
-// Lista limpa focada nas famílias principais de processadores
-const listaProcessadores = [
-  "Intel Core 2 Duo",
-  "Intel Core i3",
-  "Intel Core i5",
-  "Intel Core i7",
-  "Intel Core i9",
-  "AMD Phenom",
-  "AMD FX",
-  "AMD Ryzen 3",
-  "AMD Ryzen 5",
-  "AMD Ryzen 7",
-  "AMD Ryzen 9"
-];
-
-function renderizarSugestoes(termo = '') {
-  cpuDropdown.innerHTML = '';
-  const filtrados = termo
-    ? listaProcessadores.filter(cpu => cpu.toLowerCase().includes(termo.toLowerCase()))
-    : listaProcessadores;
-
-  if (filtrados.length === 0) {
-    cpuDropdown.classList.add('hidden');
-    return;
-  }
-
-  filtrados.forEach(cpu => {
-    const li = document.createElement('li');
-    li.textContent = cpu;
-    li.addEventListener('pointerdown', (e) => {
-      e.preventDefault();
-      cpuInput.value = cpu;
-      cpuDropdown.classList.add('hidden');
-    });
-    cpuDropdown.appendChild(li);
-  });
-
-  cpuDropdown.classList.remove('hidden');
-}
-
-cpuInput.addEventListener('focus', () => renderizarSugestoes(cpuInput.value.trim()));
-cpuInput.addEventListener('input', () => renderizarSugestoes(cpuInput.value.trim()));
-
-document.addEventListener('pointerdown', (e) => {
-  if (!e.target.closest('.autocomplete-wrapper')) {
-    cpuDropdown.classList.add('hidden');
-  }
-});
 
 btnSearch.addEventListener('click', verificarJogo);
 gameSearchInput.addEventListener('keypress', (e) => {
@@ -65,39 +14,53 @@ gameSearchInput.addEventListener('input', () => {
   errorMessage.classList.add('hidden');
 });
 
-// Lógica de pontuação por nível de família de CPU
+// Calcula pontuação baseada em Família + Geração que o usuário completou (Ex: Intel Core i3-2100)
 function calcularScoreCpu(textoCpu) {
   const texto = textoCpu.toLowerCase().trim();
-  if (!texto) return 2;
+  if (!texto) return 150;
 
-  const cpuTiers = {
-    'core 2': 1,
-    'phenom': 1,
-    'fx': 1,
-    'i3': 2,
-    'ryzen 3': 2,
-    'i5': 3,
-    'ryzen 5': 3,
-    'i7': 4,
-    'ryzen 7': 4,
-    'i9': 5,
-    'ryzen 9': 5
-  };
+  const matchModerno = texto.match(/(i[3579]|ryzen\s*[3579])[\s-]*(\d{4,5})?/i);
+  
+  if (matchModerno) {
+    const familia = matchModerno[1].toLowerCase().replace(/\s+/g, '');
+    const modeloNum = matchModerno[2] || '';
 
-  for (const [key, val] of Object.entries(cpuTiers)) {
-    if (texto.includes(key)) {
-      return val;
+    const baseScores = {
+      'i3': 100, 'ryzen3': 100,
+      'i5': 200, 'ryzen5': 200,
+      'i7': 300, 'ryzen7': 300,
+      'i9': 400, 'ryzen9': 400
+    };
+
+    let score = baseScores[familia] || 150;
+
+    if (modeloNum.length === 5) {
+      const geracao = parseInt(modeloNum.substring(0, 2));
+      score += geracao * 15;
+    } else if (modeloNum.length === 4) {
+      const geracao = parseInt(modeloNum.substring(0, 1));
+      score += geracao * 15;
+    } else {
+      score += 4 * 15;
     }
+
+    return score;
   }
 
-  return 2; // Padrão intermediário seguro
+  // Processadores legados
+  if (texto.includes('fx-8') || texto.includes('fx 8')) return 140;
+  if (texto.includes('fx-6') || texto.includes('fx 6')) return 120;
+  if (texto.includes('core 2 quad') || texto.includes('phenom')) return 70;
+  if (texto.includes('core 2 duo') || texto.includes('dual core') || texto.includes('pentium') || texto.includes('athlon')) return 50;
+
+  return 100;
 }
 
 async function verificarJogo() {
   const nomeJogo = gameSearchInput.value.trim();
   const userRam = parseFloat(document.getElementById('ram').value) || 0;
   const userVram = parseFloat(document.getElementById('vram').value) || 0;
-  const userCpuText = cpuInput.value;
+  const userCpuText = document.getElementById('cpu').value;
 
   if (!nomeJogo) {
     errorMessage.classList.remove('hidden');
@@ -150,15 +113,17 @@ async function verificarJogo() {
       else if (unidade === 'KB') requiredVramGb = valor / (1024 * 1024);
     }
 
-    // --- EXTRAÇÃO DA CPU EXIGIDA PELO JOGO ---
-    const matchCpuReq = reqText.match(/(i[3579]|ryzen\s*[3579]|fx[\s-]*\d{4}|core\s*2\s*(?:duo|quad)|phenom)/i);
+    // --- EXTRAÇÃO DO PROCESSADOR EXIGIDO PELO JOGO ---
+    const matchCpuReq = reqText.match(/(?:processor|cpu)[^\n\r]*?((?:i[3579]|ryzen\s*[3579])[\s-]*\d{4,5}|i[3579]|ryzen\s*[3579]|fx[\s-]*\d{4}|core\s*2\s*(?:duo|quad)|phenom)/i) ||
+                        reqText.match(/((?:i[3579]|ryzen\s*[3579])[\s-]*\d{4,5}|i[3579]|ryzen\s*[3579]|fx[\s-]*\d{4}|core\s*2\s*(?:duo|quad)|phenom)/i);
+    
     const requiredCpuText = matchCpuReq ? matchCpuReq[1] : '';
-    const requiredCpuLevel = requiredCpuText ? calcularScoreCpu(requiredCpuText) : 1;
-    const userCpuLevel = calcularScoreCpu(userCpuText);
+    const requiredCpuScore = requiredCpuText ? calcularScoreCpu(requiredCpuText) : 50;
+    const userCpuScore = calcularScoreCpu(userCpuText);
 
     const temRam = userRam >= requiredRamGb;
     const temVram = userVram >= requiredVramGb;
-    const temCpu = userCpuLevel >= requiredCpuLevel;
+    const temCpu = userCpuScore >= requiredCpuScore;
 
     const roda = temRam && temVram && temCpu;
 
