@@ -5,26 +5,6 @@ const gameSearchInput = document.getElementById('game-search');
 const resultContainer = document.getElementById('result-container');
 const errorMessage = document.getElementById('error-message');
 const vramInput = document.getElementById('vram');
-const vramInfo = document.getElementById('vram-info');
-
-// Atualiza a dica em tempo real mostrando a conversão MB <-> GB
-vramInput.addEventListener('input', () => {
-  const val = parseFloat(vramInput.value);
-  if (isNaN(val) || val <= 0) {
-    vramInfo.innerHTML = "Digite em MB (ex: 256) ou GB (ex: 2)";
-    return;
-  }
-
-  if (val > 16) {
-    // Se digitou em MB (ex: 4096)
-    const emGb = (val / 1024).toFixed(2);
-    vramInfo.innerHTML = `💡 ${val} MB = <strong>${emGb} GB</strong> VRAM`;
-  } else {
-    // Se digitou em GB (ex: 4)
-    const emMb = Math.round(val * 1024);
-    vramInfo.innerHTML = `💡 ${val} GB = <strong>${emMb} MB</strong> VRAM`;
-  }
-});
 
 btnSearch.addEventListener('click', verificarJogo);
 gameSearchInput.addEventListener('keypress', (e) => {
@@ -78,10 +58,10 @@ function calcularScoreCpu(textoCpu) {
 async function verificarJogo() {
   const nomeJogo = gameSearchInput.value.trim();
   const userRam = parseFloat(document.getElementById('ram').value) || 0;
-  const inputVramRaw = parseFloat(vramInput.value) || 0;
-
-  // Lógica inteligente: se o usuário digitar mais que 16, assumimos que colocou em MB (ex: 256 ou 2048) e convertemos para GB. Senão, tratamos como GB.
-  const userVram = inputVramRaw > 16 ? inputVramRaw / 1024 : inputVramRaw;
+  
+  // Como o usuário digita em MB, convertemos para GB dividindo por 1024 para comparar com a API
+  const userVramMb = parseFloat(vramInput.value) || 0;
+  const userVram = userVramMb / 1024;
 
   const userCpuText = document.getElementById('cpu').value;
 
@@ -166,6 +146,7 @@ async function verificarJogo() {
       let motivo = [];
       if (!temRam) motivo.push(`${Math.ceil(requiredRamGb)}GB RAM`);
       if (!temVram) {
+        // Exibe em MB se for menor que 1GB, ou em GB se for maior
         const vramExigidaTexto = requiredVramGb < 1 ? Math.round(requiredVramGb * 1024) + 'MB' : requiredVramGb + 'GB';
         motivo.push(`${vramExigidaTexto} VRAM`);
       }
