@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Meu PC Roda?</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
 
@@ -22,18 +22,18 @@
       </div>
     </div>
 
-    <!-- Campo de Processador com Lista Customizada de Nomes Específicos -->
+    <!-- Campo de Processador com Lista Customizada -->
     <div class="input-group autocomplete-wrapper">
       <label for="cpu">Processador (Nome Completo / Modelo)</label>
       <input 
         type="text" 
         id="cpu" 
-        placeholder="Digite i3, i5, i7 ou Ryzen para ver os modelos..." 
+        placeholder="Toque ou digite i3, i5, i7, Ryzen..." 
         autocomplete="off"
       >
       <span class="hint-text">Ex: <strong>Intel Core i3-2100</strong>, <strong>Intel Core i7-3770</strong>, <strong>AMD Ryzen 5 3600</strong></span>
       
-      <!-- Caixa flutuante de sugestões -->
+      <!-- Lista flutuante de sugestões -->
       <ul id="cpu-dropdown" class="dropdown-list hidden"></ul>
     </div>
 
@@ -57,6 +57,6 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=2"></script>
 </body>
 </html>
