@@ -18,30 +18,57 @@
       </div>
       <div class="input-group">
         <label for="vram">VRAM (GB)</label>
-        <input type="number" id="vram" placeholder="Ex: 4" min="0">
+        <input type="number" id="vram" placeholder="Ex: 4" min="0" step="0.5">
       </div>
     </div>
 
-    <!-- Campo de Processador com Sugestões (Autocompletar) -->
+    <!-- Campo de Processador com Modelos Específicos -->
     <div class="input-group">
-      <label for="cpu">Processador (Nível / Geração)</label>
-      <input type="text" id="cpu" placeholder="Ex: i5, Ryzen 5..." list="cpu-suggestions">
+      <label for="cpu">Processador (Modelo Específico)</label>
+      <input type="text" id="cpu" placeholder="Ex: i3-2100, i7-3770, Ryzen 5 3600..." list="cpu-suggestions">
       <datalist id="cpu-suggestions">
-        <option value="Intel Core i3">
-        <option value="Intel Core i5">
-        <option value="Intel Core i7">
-        <option value="Intel Core i9">
-        <option value="AMD Ryzen 3">
-        <option value="AMD Ryzen 5">
-        <option value="AMD Ryzen 7">
-        <option value="AMD Ryzen 9">
+        <option value="Intel Core 2 Duo E6600">
+        <option value="Intel Core i3-2100">
+        <option value="Intel Core i3-4170">
+        <option value="Intel Core i3-8100">
+        <option value="Intel Core i3-10100F">
+        <option value="Intel Core i3-12100F">
+        <option value="Intel Core i5-2400">
+        <option value="Intel Core i5-3470">
+        <option value="Intel Core i5-4460">
+        <option value="Intel Core i5-7400">
+        <option value="Intel Core i5-9400F">
+        <option value="Intel Core i5-10400F">
+        <option value="Intel Core i5-12400F">
+        <option value="Intel Core i7-2600">
+        <option value="Intel Core i7-3770">
+        <option value="Intel Core i7-4790">
+        <option value="Intel Core i7-6700K">
+        <option value="Intel Core i7-8700K">
+        <option value="Intel Core i7-10700K">
+        <option value="Intel Core i7-12700K">
+        <option value="Intel Core i9-9900K">
+        <option value="Intel Core i9-12900K">
+        <option value="AMD Phenom X3 8750">
+        <option value="AMD FX-6300">
+        <option value="AMD FX-8350">
+        <option value="AMD Ryzen 3 1200">
+        <option value="AMD Ryzen 3 3200G">
+        <option value="AMD Ryzen 5 1600">
+        <option value="AMD Ryzen 5 2600">
+        <option value="AMD Ryzen 5 3600">
+        <option value="AMD Ryzen 5 5600">
+        <option value="AMD Ryzen 7 2700X">
+        <option value="AMD Ryzen 7 3700X">
+        <option value="AMD Ryzen 7 5800X">
+        <option value="AMD Ryzen 9 5900X">
       </datalist>
     </div>
 
     <div class="input-group">
       <label for="game-search">Nome do Jogo</label>
       <div class="search-group">
-        <input type="text" id="game-search" placeholder="Ex: GTA V, Cyberpunk...">
+        <input type="text" id="game-search" placeholder="Ex: GTA V, Cyberpunk, CS:GO...">
         <button id="btn-search">Buscar</button>
       </div>
       <span id="error-message" class="error-text hidden">Por favor, digite um nome válido.</span>
